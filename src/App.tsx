@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { NewNoteInput } from './components/NewNote/NewNoteInput';
+import { useDispatch, useSelector } from 'react-redux';
+import { NotesState } from './store/notes/reducer';
+import { addNote } from './store/notes/actions';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    // primer valor el tipo, y el segundo el tipo de lo k va devolver
+    const notes = useSelector<NotesState, NotesState['notes']>((state) => state.notes);
+    //update
+    const dispatch = useDispatch();
+
+    const onAddNote = (note: string) => {
+        dispatch(addNote(note))
+    }
+
+    return (
+        <>
+            <NewNoteInput addNote={onAddNote} />
+            <hr />
+            <ul>
+                {notes.map((note) => {
+                    return <li key={note}>{note}</li>
+                })}
+            </ul>
+        </>
+    );
 }
 
 export default App;
